@@ -6,3 +6,9 @@ add packages to requirements.txt: pip freeze > requirements.txt >> pip install -
 
 ========
 create django project => django-admin startproject admin_panel
+create django app=>
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+create superuser:
+python manage.py createsuperuser
