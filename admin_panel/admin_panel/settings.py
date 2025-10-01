@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "blog.apps.BlogConfig",
     "roadmap.apps.RoadmapConfig",
+    "contact.apps.ContactConfig",
+    "character.apps.CharacterConfig",
 ]
 
 MIDDLEWARE = [
