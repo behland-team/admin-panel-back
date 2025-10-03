@@ -41,10 +41,19 @@ INSTALLED_APPS = [
     "roadmap.apps.RoadmapConfig",
     "contact.apps.ContactConfig",
     "character.apps.CharacterConfig",
+    "rest_framework",
+    "corsheaders"
+]
+
+CORS_ALLOWED_ORIGINS=[
+    "http://localhost:3000",
+    "http://beh.land",
+    "https://behsite.hiteck.ir",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+       "corsheaders.middleware.CorsMiddleware", 
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
