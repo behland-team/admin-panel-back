@@ -12,3 +12,8 @@ python3 manage.py migrate
 
 create superuser:
 python manage.py createsuperuser
+
+=========
+python manage.py makemigrations --settings=admin_panel.settings.dev
+python manage.py migrate --settings=admin_panel.settings.dev
+python manage.py runserver --settings=admin_panel.settings.dev
