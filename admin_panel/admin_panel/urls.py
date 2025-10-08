@@ -23,6 +23,7 @@ urlpatterns = [
     path("api/", include([
         path("roadmap/", include("roadmap.urls")),
         path("contact/", include("contact.urls")),
+        path("teams/", include("teams.urls")),
         path("blog/", include("blog.urls")),
     ])),
 ]

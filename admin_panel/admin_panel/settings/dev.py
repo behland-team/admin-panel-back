@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "roadmap.apps.RoadmapConfig",
     "contact.apps.ContactConfig",
     "character.apps.CharacterConfig",
+    "teams.apps.TeamsConfig",
     "rest_framework",
     "corsheaders"
 ]
