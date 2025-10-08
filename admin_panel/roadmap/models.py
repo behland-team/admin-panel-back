@@ -4,7 +4,7 @@ from django.db import models
 
 class RoadmapSection(models.Model):
     title=models.CharField(max_length=200)
-    order=models.PositiveBigIntegerField()
+    order=models.PositiveIntegerField()
     class Meta:
         ordering = ["order"]
 
@@ -23,4 +23,4 @@ class RoadmapItem(models.Model):
         ordering = ["order"]
 
     def __str__(self):
-        return self.desc[:50]
+        return self.description[:50]
