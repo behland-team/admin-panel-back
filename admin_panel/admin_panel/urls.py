@@ -24,6 +24,7 @@ urlpatterns = [
         path("roadmap/", include("roadmap.urls")),
         path("contact/", include("contact.urls")),
         path("teams/", include("teams.urls")),
+        path("faq/", include("faq.urls")),
         path("blog/", include("blog.urls")),
     ])),
 ]

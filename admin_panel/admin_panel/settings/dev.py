@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "contact.apps.ContactConfig",
     "character.apps.CharacterConfig",
     "teams.apps.TeamsConfig",
+    "faq.apps.FaqConfig",
     "rest_framework",
     "corsheaders"
 ]
