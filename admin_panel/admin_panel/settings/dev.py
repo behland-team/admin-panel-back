@@ -44,8 +44,10 @@ INSTALLED_APPS = [
     "teams.apps.TeamsConfig",
     "faq.apps.FaqConfig",
     "rest_framework",
-    "corsheaders"
+    "corsheaders",
+    "authuser"
 ]
+AUTH_USER_MODEL = 'authuser.User'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
