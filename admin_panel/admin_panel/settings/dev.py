@@ -47,6 +47,12 @@ INSTALLED_APPS = [
     "corsheaders",
     "authuser"
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+}
 AUTH_USER_MODEL = 'authuser.User'
 
 CORS_ALLOWED_ORIGINS = [
