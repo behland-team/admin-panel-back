@@ -2,7 +2,8 @@ from django.contrib.auth import get_user_model
 from rest_framework import viewsets, permissions, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .serializers import UserSerializer, UserCreateSerializer
+from .serializer import UserSerializer, UserCreateSerializer
+
 
 User = get_user_model()
 
