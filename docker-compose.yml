@@ -18,9 +18,4 @@ volumes:
   pgdata:
   static:
   media:
-nginx:
-  image: nginx:1.27
-  depends_on:
-    - web
-  ports:
-    - "8080:80"
+  
