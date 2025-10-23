@@ -1,0 +1,8 @@
+.git
+**/__pycache__/
+**/*.pyc
+venv
+.env
+admin_panel/.env
+admin_panel/db.sqlite3
+*.log
