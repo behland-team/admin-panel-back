@@ -95,7 +95,7 @@ if DATABASE_URL:
     DATABASES = {"default": dj_database_url.parse(DATABASE_URL, conn_max_age=600)}
 else:
     # سازگاری با متغیرهای قدیمی در صورت نیاز (MySQL/…)
-    ENGINE = os.getenv("DB_ENGINE", "django.db.backends.sqlite3")
+    ENGINE = os.getenv("DATABASE_ENGINE", "django.db.backends.sqlite3")
     if ENGINE == "django.db.backends.sqlite3":
         DATABASES = {"default": {"ENGINE": ENGINE, "NAME": BASE_DIR / "db.sqlite3"}}
     else:
@@ -106,7 +106,7 @@ else:
                 "USER": os.getenv("DB_USER"),
                 "PASSWORD": os.getenv("DB_PASSWORD"),
                 "HOST": os.getenv("DB_HOST", "127.0.0.1"),
-                "PORT": os.getenv("DB_PORT", "3306"),
+                "PORT": os.getenv("DATABASE_PORT", "3306"),
                 "ATOMIC_REQUESTS": True,
             }
         }
