@@ -5,7 +5,7 @@ import dj_database_url
 
 # ───────────────────────────────── Base paths & .env
 # settings.py در admin_panel/admin_panel/ است → BASE_DIR باید ریشه‌ی app باشد (کنار manage.py)
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # 1) برای اجرای لوکال (بدون داکر): .env کنار manage.py
 load_dotenv(BASE_DIR / ".env")
