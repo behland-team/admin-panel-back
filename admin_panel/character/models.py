@@ -1,10 +1,11 @@
 from django.db import models
-
+from django.dispatch import receiver
+from django.db.models.signals import post_delete
 # Create your models here.
 class character(models.Model):
     name = models.CharField(max_length=100)
-    # image
-    # avatar
+    image=models.ImageField(upload_to='assets/character_images/', null=True, blank=True)
+    avatar=models.ImageField(upload_to='assets/character_avatars/' ,null=True, blank=True)
     description=models.CharField(max_length=600)
     goal=models.CharField(max_length=250)
     strategy=models.CharField(max_length=250)
@@ -17,3 +18,11 @@ class character(models.Model):
     
     def __str__(self):
         return self.name
+
+
+@receiver(post_delete, sender=character)
+def delete_image_on_character_delete(sender, instance, **kwargs):
+    if instance.image:
+        instance.image.delete(save=False)
+    if instance.avatar:
+        instance.avatar.delete(save=False)
