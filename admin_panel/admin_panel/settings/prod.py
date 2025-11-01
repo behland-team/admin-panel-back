@@ -51,6 +51,9 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = "authuser.User"
 
+MEDIA_URL = "/assets/"                 
+MEDIA_ROOT = BASE_DIR / "assets"
+
 # ───────────────────────────────── Middleware
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -119,10 +122,10 @@ USE_TZ = True
 
 # ───────────────────────────────── Static & Media
 STATIC_URL = "/static/"
-MEDIA_URL = "/media/"
+# MEDIA_URL = "/media/"
 # در داکر از این مسیرها برای مپ‌کردن ولوم‌ها استفاده می‌کنیم
 STATIC_ROOT = BASE_DIR / "staticfiles"
-MEDIA_ROOT = BASE_DIR / "media"
+# MEDIA_ROOT = BASE_DIR / "media"
 
 # WhiteNoise: سرو استاتیک در پشت Nginx یا حتی بدون آن
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

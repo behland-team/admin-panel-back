@@ -1,5 +1,4 @@
 from django.db.models import Count, Q
-# from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -13,10 +12,7 @@ from .serializers import (
 
 
 class IsAdminOrReadOnly(permissions.BasePermission):
-    """
-    عموم مردم: فقط خواندن
-    ادمین/استاف: CRUD کامل
-    """
+ 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
             return True
@@ -24,11 +20,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
 
 class FAQCategoryViewSet(viewsets.ModelViewSet):
-    """
-    /api/faq-categories/           GET(list), POST(create)
-    /api/faq-categories/{id}/      GET(retrieve), PUT/PATCH, DELETE
-    /api/faq-categories/{id}/faqs/ GET → لیست FAQهای همین کتگوری
-    """
+
     queryset = FAQCategory.objects.all().annotate(faq_count=Count("faqs"))
     permission_classes = [IsAdminOrReadOnly]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
@@ -56,14 +48,10 @@ class FAQCategoryViewSet(viewsets.ModelViewSet):
 
 
 class FAQViewSet(viewsets.ModelViewSet):
-    """
-    /api/faqs/                      GET(list), POST(create)
-    /api/faqs/{id}/                 GET(retrieve), PUT/PATCH, DELETE
-    """
+ 
     queryset = FAQ.objects.select_related("category").all()
     serializer_class = FAQSerializer
     permission_classes = [IsAdminOrReadOnly]
-    # filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ["category"]                 # ?category=<id>
     search_fields = ["question", "answer", "category__name"]
     ordering_fields = ["question", "category__name"]

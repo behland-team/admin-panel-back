@@ -56,6 +56,9 @@ INSTALLED_APPS = [
     "drf_spectacular_sidecar", 
 ]
 
+MEDIA_URL = "/assets/"                 
+MEDIA_ROOT = BASE_DIR / "assets"
+
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "DEFAULT_AUTHENTICATION_CLASSES": [
