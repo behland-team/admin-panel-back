@@ -1,5 +1,5 @@
 from django.db.models import Count, Q
-from django_filters.rest_framework import DjangoFilterBackend
+# from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -63,7 +63,7 @@ class FAQViewSet(viewsets.ModelViewSet):
     queryset = FAQ.objects.select_related("category").all()
     serializer_class = FAQSerializer
     permission_classes = [IsAdminOrReadOnly]
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    # filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ["category"]                 # ?category=<id>
     search_fields = ["question", "answer", "category__name"]
     ordering_fields = ["question", "category__name"]
