@@ -1,6 +1,7 @@
 from django.db import models
 from django.dispatch import receiver
 from django.db.models.signals import post_delete
+
 # Create your models here.
 class character(models.Model):
     name = models.CharField(max_length=100)
@@ -8,7 +9,10 @@ class character(models.Model):
     avatar=models.ImageField(upload_to='assets/character_avatars/' ,null=True, blank=True)
     description=models.CharField(max_length=600)
     goal=models.CharField(max_length=250)
-    strategy=models.CharField(max_length=250)
+    strategy = models.JSONField(default=list, blank=True)
+    symbols=models.CharField(max_length=250,blank=True,default="")
+    slogan=models.CharField(max_length=250,blank=True,default="")
+    weekness=models.CharField(max_length=250)
     roal=models.CharField(max_length=250)
     personality=models.CharField(max_length=250)
     age=models.PositiveIntegerField(default=0)
