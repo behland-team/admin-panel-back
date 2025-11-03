@@ -7,13 +7,18 @@ class TeamMember(models.Model):
     position = models.CharField(max_length=100)
     photo = models.ImageField(upload_to='team_photos/')
     bio = models.TextField()
+    order = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return f"{self.full_name} - {self.position}"
+    class Meta:
+        ordering = ['order']
     
 @receiver(post_delete, sender=TeamMember)
 def delete_photo_on_team_member_delete(sender, instance, **kwargs):
     if instance.photo:
         instance.photo.delete(save=False)
+
+

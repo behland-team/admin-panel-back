@@ -4,6 +4,6 @@ from teams.models import TeamMember
 
 @admin.register(TeamMember)
 class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = ("full_name", "position", "created_at")
+    list_display = ("full_name", "position", "created_at","order")
     search_fields = ("full_name", "position")
-    ordering = ("full_name",)
+    ordering = ("full_name","order")
