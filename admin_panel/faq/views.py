@@ -45,6 +45,18 @@ class FAQCategoryViewSet(viewsets.ModelViewSet):
         if page is not None:
             return self.get_paginated_response(ser.data)
         return Response(ser.data)
+    
+    @action(detail=False,methods=["get"], url_path="(?P<name>[^/.]+)")
+    def by_name(self, request, name=None):
+        try:
+            category = FAQCategory.objects.get(name=name)
+            faqs=category.faqs.all().order_by("question")
+            serializer = FAQSerializer(faqs, many=True)
+            return Response(serializer.data)
+
+        except FAQCategory.DoesNotExist:
+            return Response({"detail": "Not found."}, status=404)
+       
 
 
 class FAQViewSet(viewsets.ModelViewSet):
