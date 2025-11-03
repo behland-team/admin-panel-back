@@ -62,10 +62,7 @@ class Post(TimeStampedModel):
 
     image = models.ImageField(upload_to="assets/blog/", blank=True, null=True)
 
-    # علاقمندیِ کاربرها به پست (بوکمارک/فیو)
-    favorites = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, blank=True, related_name="favorite_posts"
-    )
+    favorites = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         if not self.slug:

@@ -5,17 +5,19 @@ from .models import Post, Category, Tag
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ("name", "slug", "created_at")
-    search_fields = ("name", "slug")   # مهم برای autocomplete
+    search_fields = ("name", "slug")
+
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ("name", "slug", "created_at")
-    search_fields = ("name", "slug")   # مهم برای autocomplete
+    search_fields = ("name", "slug")
+
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ("title", "author", "status", "publish_at", "is_featured")
-    list_filter  = ("status", "category", "tags")
-    search_fields = ("title", "content", "slug")  # (برای خود Post)
+    list_display = ("title", "author", "status", "publish_at", "is_featured", "favorites")
+    list_filter  = ("status", "category", "tags", "is_featured", "favorites")
+    search_fields = ("title", "content", "slug")
     prepopulated_fields = {"slug": ("title",)}
-    autocomplete_fields = ("author", "category", "tags")  # این به search_fields ادمین‌های بالا نیاز دارد
+    autocomplete_fields = ("author", "category", "tags")

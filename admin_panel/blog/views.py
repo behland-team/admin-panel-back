@@ -1,34 +1,54 @@
 # blog/views.py
-from rest_framework import viewsets, permissions, filters
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
+from django.db import models
+from django.utils import timezone
+from rest_framework import viewsets, filters
+# from django_filters.rest_framework import DjangoFilterBackend
+
 from .models import Post
-# from .serializers import PostSerializer
+from .serializer import PostSerializer
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all().select_related("author", "category").prefetch_related("tags")
-    # serializer_class = PostSerializer
-    lookup_field = "slug"  # به‌جای id از slug استفاده می‌کنیم
+    """
+    - lookup با slug
+    - کاربران عادی فقط پست‌های منتشرشده و رسیده به زمان انتشار را می‌بینند
+    - ادمین‌ها همه پست‌ها را می‌بینند
+    - هیچ permission اختصاصی در این فایل تعریف نشده
+    """
+    serializer_class = PostSerializer
+    lookup_field = "slug"
 
-    # فقط پست‌های منتشرشده را به همه نشون بده
+    # جست‌وجو/فیلتر/مرتب‌سازی
+    # filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ["title", "content", "slug", "category__name", "tags__name", "author__username"]
+    ordering_fields = ["publish_at", "created_at", "title"]
+    filterset_fields = {
+        "status": ["exact"],
+        "category__slug": ["exact"],
+        "tags__slug": ["exact"],
+        "is_featured": ["exact"],
+        "favorites": ["exact"],
+    }
+
+    def get_base_queryset(self):
+        return (
+            Post.objects.all()
+            .select_related("author", "category")
+            .prefetch_related("tags")
+        )
+
     def get_queryset(self):
+        qs = self.get_base_queryset()
         user = self.request.user
-        if user.is_staff:  # ادمین می‌تونه همه رو ببینه
-            return Post.objects.all()
-        return Post.objects.filter(status=Post.Status.PUBLISHED)
+        if getattr(user, "is_staff", False):
+            return qs
+
+        now = timezone.now()
+        # فقط پست‌های منتشرشده‌ای که زمان‌شان رسیده (یا زمان ندارند)
+        return qs.filter(status=Post.Status.PUBLISHED).filter(
+            models.Q(publish_at__isnull=True) | models.Q(publish_at__lte=now)
+        )
 
     def perform_create(self, serializer):
-        # موقع ساخت پست جدید نویسنده را خودکار ست کن
+        # اگر Anonymous اجازه ساخت دارد، مدل Post باید author را nullable کند؛
+        # در غیر این صورت اینجا همان کاربر فعلی را ست می‌کنیم.
         serializer.save(author=self.request.user)
-
-    # endpoint برای لیست علاقه‌مندی‌ها
-    @action(detail=True, methods=["post"], permission_classes=[permissions.IsAuthenticated])
-    def favorite(self, request, slug=None):
-        post = self.get_object()
-        user = request.user
-        if user in post.favorites.all():
-            post.favorites.remove(user)
-            return Response({"status": "removed from favorites"})
-        post.favorites.add(user)
-        return Response({"status": "added to favorites"})
