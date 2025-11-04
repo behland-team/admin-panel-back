@@ -2,24 +2,28 @@
 from rest_framework import serializers
 from .models import Post, Category, Tag
 
+
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ["id", "name", "slug"]
+        read_only_fields = ["id", "slug"]  # slug خودکار از name ساخته می‌شود
 
 
 class TagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ["id", "name", "slug"]
+        read_only_fields = ["id", "slug"]  # slug خودکار از name ساخته می‌شود
 
 
 class PostSerializer(serializers.ModelSerializer):
+    # Read-only nested
     author = serializers.StringRelatedField(read_only=True)
     category = CategorySerializer(read_only=True)
     tags = TagSerializer(many=True, read_only=True)
 
-    # فیلدهای ورودی برای نوشتن
+    # Write helpers (by slug)
     category_slug = serializers.SlugRelatedField(
         slug_field="slug",
         queryset=Category.objects.all(),
