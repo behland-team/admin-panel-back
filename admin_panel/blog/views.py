@@ -1,9 +1,10 @@
 # blog/views.py
 from django.utils import timezone
 from django.db.models import Q
-from rest_framework import viewsets, filters
-# from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .models import Post, Category, Tag
 from .serializer import PostSerializer, CategorySerializer, TagSerializer
@@ -46,6 +47,21 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
 
+    @action(detail=False, methods=["get"], url_path="by-category/(?P<category_name>[^/.]+)")
+    def by_category_name(self, request, category_name=None):
+        try:
+            category = Category.objects.get(name=category_name)
+            posts = Post.objects.filter(category=category).order_by("title")
+            serializer = PostSerializer(posts, many=True)
+            return Response(serializer.data)
+        except Category.DoesNotExist:
+            return Response(
+                {"error": f"Category '{category_name}' not found"}, 
+                status=404
+            )
+
+
+
 class CategoryViewSet(viewsets.ModelViewSet):
     """
     CRUD برای دسته‌بندی‌ها؛ slug به‌صورت خودکار از name ساخته می‌شود.
@@ -72,4 +88,3 @@ class TagViewSet(viewsets.ModelViewSet):
     search_fields = ["name", "slug"]
     ordering_fields = ["created_at", "name"]
     filterset_fields = {"name": ["icontains"], "slug": ["exact"]}
-1
