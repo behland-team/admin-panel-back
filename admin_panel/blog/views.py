@@ -3,23 +3,17 @@ from django.utils import timezone
 from django.db.models import Q
 from rest_framework import viewsets, filters
 # from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .models import Post, Category, Tag
 from .serializer import PostSerializer, CategorySerializer, TagSerializer
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    """
-    - lookup با 'slug'
-    - ادمین‌ها همه پست‌ها را می‌بینند
-    - کاربران عادی فقط پست‌های Published و زمان‌رسیده (یا بدون زمان) را می‌بینند
-    - favorites یک Boolean ساده است (با PATCH/PUT تغییر می‌کند)
-    """
     serializer_class = PostSerializer
     lookup_field = "slug"
+    permission_classes = [IsAuthenticatedOrReadOnly]  # همه GET، فقط لاگین برای تغییرات
 
-    # Search / filter / ordering
-    # filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
     search_fields = ["title", "content", "slug", "category__name", "tags__name", "author__username"]
     ordering_fields = ["publish_at", "created_at", "title"]
     filterset_fields = {
@@ -38,14 +32,17 @@ class PostViewSet(viewsets.ModelViewSet):
         )
         user = self.request.user
         if getattr(user, "is_staff", False):
+            # ادمین همه چی رو می‌بینه
             return qs
+        # بقیه فقط منتشرشده‌هایی که زمان انتشارشون رسیده
         now = timezone.now()
-        return qs.filter(status=Post.Status.PUBLISHED).filter(
+        return qs.filter(
+            status=Post.Status.PUBLISHED
+        ).filter(
             Q(publish_at__isnull=True) | Q(publish_at__lte=now)
         )
 
     def perform_create(self, serializer):
-        # اگر ساخت توسط کاربر ناشناس مجاز نیست، این خط FK را به کاربر فعلی ست می‌کند
         serializer.save(author=self.request.user)
 
 
