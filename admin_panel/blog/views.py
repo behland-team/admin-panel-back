@@ -59,7 +59,25 @@ class PostViewSet(viewsets.ModelViewSet):
                 {"error": f"Category '{category_name}' not found"}, 
                 status=404
             )
+        
+    @action(detail=False,methods=["get"],url_path="limit/(?P<post_limit>[^/.]+)")
+    def limited(self , request,post_limit=None):
+        try:
+            limit=int(request.query_params.get("limit", post_limit))   
+            if limit<0:
+                return Response({"error":"Limit must be a non-negative integer."},status=400)
+            posts=Post.objects.all().order_by("-publish_at")[:limit]
+            serializer=PostSerializer(posts,many=True)
+            return Response(serializer.data)
+        except ValueError:
+            return Response({"error":"Limit must be an integer."},status=400)   
 
+    @action(detail=False ,methods=["get"])
+    def favorites(self,request):
+       favorite_post=Post.objects.filter(favorites=True).order_by("-publish_at")
+       serializer=PostSerializer(favorite_post,many=True)
+       return Response(serializer.data)
+    
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
