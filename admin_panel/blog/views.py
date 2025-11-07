@@ -66,7 +66,7 @@ class PostViewSet(viewsets.ModelViewSet):
             limit=int(request.query_params.get("limit", post_limit))   
             if limit<0:
                 return Response({"error":"Limit must be a non-negative integer."},status=400)
-            posts=Post.objects.all().order_by("-publish_at")[:limit]
+            posts=Post.objects.filter(status=Post.Status.PUBLISHED).order_by("-publish_at")[:limit]
             serializer=PostSerializer(posts,many=True)
             return Response(serializer.data)
         except ValueError:
