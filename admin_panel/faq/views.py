@@ -20,7 +20,7 @@ class IsAdminOrReadOnly(permissions.BasePermission):
 
 
 class FAQCategoryViewSet(viewsets.ModelViewSet):
-
+    lookup_value_regex = r"\d+"
     queryset = FAQCategory.objects.all().annotate(faq_count=Count("faqs"))
     permission_classes = [IsAdminOrReadOnly]
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
