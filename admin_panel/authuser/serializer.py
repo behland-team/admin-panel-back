@@ -19,7 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "date_joined"]
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True, required=True, min_length=8)
 
     class Meta:
         model = User
@@ -30,6 +30,8 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "last_name",
             "role",
             "password",
+             "is_active",
+            "is_staff",
         ]
 
     def create(self, validated_data):
