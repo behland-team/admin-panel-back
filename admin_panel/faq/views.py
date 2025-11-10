@@ -46,7 +46,7 @@ class FAQCategoryViewSet(viewsets.ModelViewSet):
             return self.get_paginated_response(ser.data)
         return Response(ser.data)
     
-    @action(detail=False,methods=["get"], url_path="(?P<name>[^/.]+)")
+    @action(detail=False,methods=["get"], url_path="by_name(?P<name>[^/.]+)")
     def by_name(self, request, name=None):
         try:
             category = FAQCategory.objects.get(name=name)
