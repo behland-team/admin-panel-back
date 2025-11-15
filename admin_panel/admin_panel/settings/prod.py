@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "character.apps.CharacterConfig",
     "teams.apps.TeamsConfig",
     "faq.apps.FaqConfig",
+    "dex.apps.DexConfig",
 ]
 
 AUTH_USER_MODEL = "authuser.User"

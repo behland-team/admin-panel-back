@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "authuser",
+    "dex.apps.DexConfig",
      "drf_spectacular",
     "drf_spectacular_sidecar", 
 ]
